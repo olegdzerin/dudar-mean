@@ -12,7 +12,8 @@ const mongoose = require('mongoose');
 const account = require('./routes/account');
 
 const app = express();
-const port = 3000;
+// const port = 3000;
+const port = process.env.PORT || 8080
 app.use(passport.initialize())
 app.use(passport.session());
 
@@ -32,10 +33,15 @@ mongoose.connection.on('connected', () =>{
 mongoose.connection.on('error', (eror) =>{
     console.log('unsucces' + error);
 })
-app.get('/', (req,res) => res.redirect('/home'));
+//app.get('/', (req,res) => res.redirect('/home'));
 
-app.get('/home', (req,res) => res.send("<h1>home</h1>"));
+//app.get('/', (req,res) => res.send("<h1>home</h1>"));
 
 
-app.use('/account', account)
+app.use('/account', account);
+
+app.get('*', (req,res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
+})
+
 app.listen( port, () => console.log('app run'));
